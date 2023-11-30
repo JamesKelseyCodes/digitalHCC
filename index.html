@@ -1,293 +1,390 @@
 <!DOCTYPE html>
-<!-- saved from url=(0060)file:///C:/Users/684655/OneDrive%20-%20Qantas/Desktop/6.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Digital Head Count Card</title>
+<title>Digital HCC</title>
 <style>
-  .red-banner {
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+}
+
+#top-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   background-color: rgb(228, 0, 0);
   color: white;
   text-align: center;
-  font-size: 4em; /* Very large font size */
-  padding: 10px 0; /* Padding to add some space above and below the text */
+  font-weight: bold;
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1001; /* Make sure it's above other elements */
 }
-  body, html {
-    height: 100%;
-    margin: 0;
-    font-family: 'Ciutadella', 'Segoe UI', 'Roboto', -apple-system, 'San Francisco', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgb(249, 243, 233); /* Updated background color */
-  }
-.container {
+  
+#squares-container {
   display: flex;
-  flex-direction: column; /* This makes child elements stack vertically */
-  align-items: center;
-}
-  .pair {
-    display: flex; /* Keep the squares in a row */
-  }
-  .gap {
-    width: 150px; /* This is the gap between the second and third square */
-    display: flex;
   justify-content: center;
-  align-items: center;
-  }
-  .square {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    background-color: grey;
-    margin: 10px;
-    cursor: pointer;
-    border-radius: 10px; /* This will give the squares slightly rounded corners */
-    border: 2px solid rgb(245, 245, 245); /* Light grey border */
-  box-sizing: border-box; /* Ensures the border is inside the box */
-  }
-  .row-number {
-  font-size: 24px; /* Adjust the size as needed */
-  color: black; /* Color for the row number text */
+  flex-wrap: wrap;
+  /*padding: 60px 10px; Increased top and bottom padding */
+  margin-top: 70px; /* Added to create space below the top fixed banner */
+  margin-bottom: 140px; /* Added to create space below the top fixed banner */
 }
-  .square::after {
-  content: attr(data-label); /* This will use the data-label attribute as content */
+
+.square {
+  width: min(45vw, 70px); /* Width is the smaller of 20% of viewport width or 100px */
+  height: min(45vw, 70px); /* Height matches width to maintain square aspect ratio */
+  background-color: #ffffff;
+  border: 5px solid #f5f5f5;
+  cursor: pointer;
+  margin: 5px;
+  box-sizing: border-box;
+  position: relative; /* To position labels */
+}
+
+  .dynamic-text {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 20px; /* Adjust the size as needed */
-  color: black; /* Color for the label text */
+  bottom: 5px;
+  left: 5px;
+  color: black;
+font-size: 12px; /* Adjust the font size as needed */
 }
-  #tally {
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: left;
-  }
-  .tally-item {
-    font-size: 24px;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-  }
-  .tally-label {
-    min-width: 220px; /* Set a fixed width for the label */
-    display: inline-block;
-  }
-  .tally-box {
-    display: inline-block;
-    padding: 5px 10px;
-    margin-right: 10px;
-    border: 1px solid #ddd;
-    min-width: 50px;
-    text-align: left;
-  }
+
+      .square-label {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      color: black;
+      font-weight: bold;
+    }
+
+.aisle-label {
+  width: 50px; /* Adjust as needed for alignment */
+  text-align: center;
+  font-weight: bold;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
 .row {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px; /* Space between rows */
+  align-items: center;
+  width: 100%;
 }
 
-/* Other styles remain unchanged... */
 
+.square:nth-child(3) {
+  margin-left: 50px; /* Adjust gap for the aisle */
+}
+
+    #counter-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(249, 243, 233, 0.95);
+      padding: 10px 20px;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+      #counter-banner div {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+      .counter {
+      display: block;
+      margin: 5px 0;
+    }
+
+      #counter-banner .counter {
+      display: inline-block;
+      margin: 0; /* Adjusted margin */
+    }
+
+    #reset-button, #save-button  {
+  padding: 7px 12px;
+  background-color: rgb(228, 0, 0);
+  color: white;
+  border: none; /* Removes border to make it flat */
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 50px; /* Space between buttons */
+    }
+  
+    .counter {
+    display: block;
+    margin: 5px 0;
+  }
+
+  /* Styles for clicked states */
+  .first-click { background-color: #f5f5f5; border-color: rgb(228, 0, 0); }
+  .second-click { background-color: #f5f5f5; border-color: rgb(141, 226, 224); }
+  .third-click { background-color: #f5f5f5; border-color: rgb(255, 215, 0); }
+
+  /* Responsive adjustments */
+/* Responsive adjustments for smaller screens */
+@media (max-width: 300px) {
+  .square {
+    width: min(10vw, 50px); /* Larger relative size for smaller screens */
+    height: min(10vw, 50px); /* Maintain square aspect ratio */
+  }
+  /*.square:nth-child(2) {
+    margin-right: 5vw; /* Smaller gap for the 'aisle' on smaller screens
+  }*/
+
+.counter {
+  /* Removed position:absolute and bottom properties */
+  width: 100%;
+  text-align: center;
+  display: block; /* Each counter on its own line */
+  margin: 5px 0; /* Adds vertical spacing between counters */
+}
+
+    #counter-banner {
+    position: fixed; /* Keeps the banner fixed in place */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+    text-align: center;
+    padding: 10px 0;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    z-index: 1000; /* Ensures it stays above other content */
+  }
+
+  #counter-banner button {
+  margin-left: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
-  <div class="red-banner">
-    HCC
-  </div>
-<div class="container">
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3"></div>
-      <div class="square" data-label="B" data-color-index="3"></div>
-    </div>
-    <div class="gap"><span class="row-number">1</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3" style="background-color: grey;"></div>
-      <div class="square" data-label="D" data-color-index="3" style="background-color: grey;"></div>
-    </div>
+<div id="top-banner">Digital Head Count Card - Dash 8 200 Series</div>
+
+  <div id="squares-container">
+    <!-- Dynamically generate rows and squares with JavaScript -->
   </div>
 
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3"></div>
-      <div class="square" data-label="B" data-color-index="3"></div>
+  <div id="counter-banner">
+    <div>
+      <span class="counter">Adult: <span id="adult">0</span></span>
     </div>
-    <div class="gap"><span class="row-number">2</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="3"></div>
+    <div>
+      <span class="counter">Child: <span id="child">0</span></span>
     </div>
-  </div>
-
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3"></div>
-      <div class="square" data-label="B" data-color-index="3"></div>
+    <div>
+      <span class="counter">Cargo: <span id="cargo">0</span></span>
+      <button id="reset-button">Reset</button> <!-- Reset Button -->
+      <button id="save-button">Save</button>
     </div>
-    <div class="gap"><span class="row-number">3</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="3"></div>
+    <div>
+      <span class="counter">TOTAL: <span id="total">0</span></span>
     </div>
   </div>
-
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3"></div>
-      <div class="square" data-label="B" data-color-index="3"></div>
-    </div>
-    <div class="gap"><span class="row-number">4</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="0" style="background-color: rgb(228, 0, 0);"></div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="0" style="background-color: rgb(228, 0, 0);"></div>
-      <div class="square" data-label="B" data-color-index="3" style="background-color: grey;"></div>
-    </div>
-    <div class="gap"><span class="row-number">5</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="3"></div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3" style="background-color: grey;"></div>
-      <div class="square" data-label="B" data-color-index="0" style="background-color: rgb(228, 0, 0);"></div>
-    </div>
-    <div class="gap"><span class="row-number">6</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="3"></div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3"></div>
-      <div class="square" data-label="B" data-color-index="3"></div>
-    </div>
-    <div class="gap"><span class="row-number">7</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="3" style="background-color: grey;"></div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3"></div>
-      <div class="square" data-label="B" data-color-index="3"></div>
-    </div>
-    <div class="gap"><span class="row-number">8</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="3"></div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="pair">
-      <div class="square" data-label="A" data-color-index="3"></div>
-      <div class="square" data-label="B" data-color-index="3"></div>
-    </div>
-    <div class="gap"><span class="row-number">9</span></div>
-    <div class="pair">
-      <div class="square" data-label="C" data-color-index="3"></div>
-      <div class="square" data-label="D" data-color-index="3"></div>
-    </div>
-  </div>
-
-<div id="tally">
-  <div class="tally-item"><span class="tally-label">ADULT:</span> <span class="tally-box" id="adultCount">3</span></div>
-  <div class="tally-item"><span class="tally-label">CHILD:</span> <span class="tally-box" id="childCount">0</span></div>
-  <div class="tally-item"><span class="tally-label">SEAT CARGO:</span> <span class="tally-box" id="cargoCount">0</span></div>
-  <div class="tally-item"><span class="tally-label">TOTAL:</span> <span class="tally-box" id="totalCount">3</span></div>
-</div>
-</div>
-
 <script>
-document.addEventListener('DOMContentLoaded', (event) => {
-  const squares = document.querySelectorAll('.square');
-  const adultCountElem = document.getElementById('adultCount');
-  const childCountElem = document.getElementById('childCount');
-  const cargoCountElem = document.getElementById('cargoCount');
+  const squaresContainer = document.getElementById('squares-container');
+  const squareLabels = ['A', 'B', 'C', 'D'];
+  let aisleNumber = 1;
 
-  let tally = {
+  for (let row = 0; row < 9; row++) {
+    const rowDiv = document.createElement('div');
+    rowDiv.className = 'row';
+
+    // Add squares with labels
+    for (let i = 0; i < 4; i++) {
+      const squareDiv = document.createElement('div');
+      squareDiv.className = 'square';
+      const label = document.createElement('span');
+      label.className = 'square-label';
+      label.innerText = squareLabels[i];
+      squareDiv.appendChild(label);
+      rowDiv.appendChild(squareDiv);
+
+      // Add aisle label in the middle of the row
+      if (i === 1) {
+        const aisleLabel = document.createElement('div');
+        aisleLabel.className = 'aisle-label';
+        aisleLabel.innerText = aisleNumber;
+        rowDiv.appendChild(aisleLabel);
+      }
+    }
+    squaresContainer.appendChild(rowDiv);
+    aisleNumber++;
+  }
+  
+  let states = [];
+  const counters = {
     adult: 0,
     child: 0,
     cargo: 0
   };
+  const adultCounter = document.getElementById('adult');
+  const childCounter = document.getElementById('child');
+  const cargoCounter = document.getElementById('cargo');
+  const totalCounter = document.getElementById('total'); // Total counter element
+  const squares = document.querySelectorAll('.square');
 
-  function updateTallyDisplay() {
-    adultCountElem.textContent = tally.adult;
-    childCountElem.textContent = tally.child;
-    cargoCountElem.textContent = tally.cargo;
+  // Function to update the total tally
+  function updateTotal() {
+    const total = counters.adult + counters.child + counters.cargo;
+    totalCounter.textContent = total;
   }
 
-  squares.forEach(square => {
-    // Initialize a colorIndex data attribute
-    square.dataset.colorIndex = '3'; // Start with grey, which is the 4th color (index 3)
+squares.forEach((square, index) => {
+  states[index] = 0; // Initialize state for each square
+  const dynamicText = document.createElement('span'); // Create a new span for dynamic text
+  dynamicText.className = 'dynamic-text';
+  square.appendChild(dynamicText); // Append it to the square
 
-    square.addEventListener('click', function() {
-      // Convert the data attribute to a number and increment it
-      let colorIndex = (parseInt(this.dataset.colorIndex) + 1) % 4;
+  square.addEventListener('click', function() {
+    // Update counters based on the current state of the clicked square
+    if (states[index] === 0) {
+      counters.adult++;
+      dynamicText.textContent = 'ADULT';
+    } else if (states[index] === 1) {
+      counters.adult--;
+      counters.child++;
+      dynamicText.textContent = 'CHILD';
+    } else if (states[index] === 2) {
+      counters.child--;
+      counters.cargo++;
+      dynamicText.textContent = 'CARGO';
+    } else if (states[index] === 3) {
+      counters.cargo--;
+      dynamicText.textContent = '';
+    }
 
-      // Set the background color based on the color index
-      switch (colorIndex) {
-        case 0: // Red
-          this.style.backgroundColor = 'rgb(228, 0, 0)';
-          tally.adult++;
-          break;
-        case 1: // Yellow
-          this.style.backgroundColor = 'rgb(141, 226, 224)';
-          if (this.dataset.colorIndex === '0') { // If previous color was red
-            tally.adult--;
-          }
-          tally.child++;
-          break;
-        case 2: // Blue
-          this.style.backgroundColor = 'rgb(50, 50, 50)';
-          if (this.dataset.colorIndex === '1') { // If previous color was yellow
-            tally.child--;
-          }
-          tally.cargo++;
-          break;
-        case 3: // Grey
-          this.style.backgroundColor = 'grey';
-          if (this.dataset.colorIndex === '2') { // If previous color was blue
-            tally.cargo--;
-          }
-          break;
+      // Update state, UI, and square styles
+      states[index] = (states[index] + 1) % 4;
+      square.className = 'square'; // Reset to default style
+      if (states[index] === 1) {
+        square.classList.add('first-click');
+      } else if (states[index] === 2) {
+        square.classList.add('second-click');
+      } else if (states[index] === 3) {
+        square.classList.add('third-click');
       }
-
-      // Update the data attribute to the new index
-      this.dataset.colorIndex = colorIndex.toString();
-
-      // Update the tally display
-      updateTallyDisplay();
+      adultCounter.textContent = counters.adult;
+      childCounter.textContent = counters.child;
+      cargoCounter.textContent = counters.cargo;
+      updateTotal();
     });
-    function updateTallyDisplay() {
-  adultCountElem.textContent = tally.adult;
-  childCountElem.textContent = tally.child;
-  cargoCountElem.textContent = tally.cargo;
-  
-  // Calculate the total and update the total tally display
-  let total = tally.adult + tally.child + tally.cargo;
-  document.getElementById('totalCount').textContent = total;
-}
   });
+
+    document.getElementById('reset-button').addEventListener('click', function() {
+    // Display confirmation prompt
+    const shouldReset = confirm('Are you sure you want to reset the Head Count Card?');
+    
+    // Check if user confirmed the action
+    if (shouldReset) {
+      // Resetting counters
+      counters.adult = 0;
+      counters.child = 0;
+      counters.cargo = 0;
+      adultCounter.textContent = '0';
+      childCounter.textContent = '0';
+      cargoCounter.textContent = '0';
+      totalCounter.textContent = '0';
+
+      // Resetting squares
+      squares.forEach((square) => {
+        square.className = 'square'; // Resets to default style
+        const dynamicText = square.querySelector('.dynamic-text');
+        if (dynamicText) {
+          dynamicText.textContent = ''; // Clear the dynamic text
+        }
+      });
+
+      // Resetting states
+      states = states.map(() => 0);
+    }
+  });
+
+  document.getElementById('save-button').addEventListener('click', function() {
+    // Display confirmation prompt
+    const shouldSave = confirm('Do you want to save the Head Count Card?');
+    
+    // Check if user confirmed the action
+    if (shouldSave) {
+      // Code to save the data to a file
+      const timestamp = new Date().toISOString();
+      const data = `Timestamp: ${timestamp}\nAdult: ${counters.adult}\nChild: ${counters.child}\nCargo: ${counters.cargo}`;
+      // Call a function to save the data to a file
+      saveDataToFile(data);
+    }
 });
+
+function saveDataToFile(data) {
+  const totalTally = counters.adult + counters.child + counters.cargo;
+  const timestamp = new Date().toISOString();
+  const dataWithTotal = `Timestamp: ${timestamp}\nAdult: ${counters.adult}\nChild: ${counters.child}\nCargo: ${counters.cargo}\nTOTAL: ${totalTally}`;
+  
+  const blob = new Blob([dataWithTotal], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'head-count-card.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+  
+</script>
+
+<script>
+    const manifest = {
+        "name": "Digital Head Count Card",
+        "short_name": "Digital HCC",
+        "theme_color": "#ffffff",
+        "background_color": "#ffffff",
+        "display": "standalone",
+        "scope": "/",
+        "start_url": "/"
+    };
+
+    const stringManifest = JSON.stringify(manifest);
+    const blob = new Blob([stringManifest], {type: 'application/json'});
+    const manifestURL = URL.createObjectURL(blob);
+    document.querySelector('head').insertAdjacentHTML('beforeend', `<link rel="manifest" href="${manifestURL}">`);
+</script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        const swScript = `
+            self.addEventListener('install', function(event) {
+                console.log('Service Worker installing.');
+            });
+
+            self.addEventListener('fetch', function(event) {
+                console.log('Service Worker fetching.');
+            });
+        `;
+
+        const blob = new Blob([swScript], { type: "text/javascript" });
+        const swURL = URL.createObjectURL(blob);
+
+        navigator.serviceWorker.register(swURL)
+            .then(function(registration) {
+                console.log('Service Worker Registered with scope: ', registration.scope);
+            })
+            .catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+    }
 </script>
 
 
-</body></html>
+</body>
+</html>
