@@ -1,3 +1,6 @@
+User
+read this:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +9,20 @@
 <title>Digital HCC</title>
 <style>
 
+.highlight-zone {
+  background-color: rgba(245, 245, 245, 0.5)
+}
+
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 }
+
+#zone-tallies {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
 
 #top-banner {
   position: fixed;
@@ -76,23 +90,37 @@ font-size: 12px; /* Adjust the font size as needed */
 }
 
 
+.tally-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .square:nth-child(3) {
   margin-left: 50px; /* Adjust gap for the aisle */
 }
 
-    #counter-banner {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgba(249, 243, 233, 0.95);
-      padding: 10px 20px;
-      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
+#counter-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(249, 243, 233, 0.95);
+  padding: 10px 20px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex; /* This will create a row layout */
+  justify-content: space-around; /* Spaces out the children evenly */
+  align-items: flex-start; /* Aligns items to the start of the flex container */
+  height: 100px;
+  transition: height 1s !important;
+}
+
+    
+  .expanded-banner {
+  height: 600px;
+  /* Additional styles for expanded state */
+  }
 
       #counter-banner div {
       display: flex;
@@ -149,18 +177,6 @@ font-size: 12px; /* Adjust the font size as needed */
   margin: 5px 0; /* Adds vertical spacing between counters */
 }
 
-    #counter-banner {
-    position: fixed; /* Keeps the banner fixed in place */
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
-    text-align: center;
-    padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    z-index: 1000; /* Ensures it stays above other content */
-  }
-
   #counter-banner button {
   margin-left: 20px;
   padding: 5px 10px;
@@ -171,27 +187,31 @@ font-size: 12px; /* Adjust the font size as needed */
 <body>
 <div id="top-banner">Digital Head Count Card - Dash 8 200 Series</div>
 
-  <div id="squares-container">
-    <!-- Dynamically generate rows and squares with JavaScript -->
-  </div>
+<div id="squares-container">
+  <!-- Dynamically generate rows and squares with JavaScript -->
+</div>
 
-  <div id="counter-banner">
-    <div>
-      <span class="counter">Adult: <span id="adult">0</span></span>
-    </div>
-    <div>
-      <span class="counter">Child: <span id="child">0</span></span>
-    </div>
-    <div>
-      <span class="counter">Cargo: <span id="cargo">0</span></span>
-      <button id="reset-button">Reset</button> <!-- Reset Button -->
-      <button id="save-button">Save</button>
-    </div>
-    <div>
-      <span class="counter">TOTAL: <span id="total">0</span></span>
-    </div>
+<div id="counter-banner">
+  <div class="tally-column">
+    <span class="zone-counter">Zone 1: <span id="zone1-total">0</span></span>
+    <span class="zone-counter">Zone 2: <span id="zone2-total">0</span></span>
+    <span class="zone-counter">Zone 3: <span id="zone3-total">0</span></span>
   </div>
+  <div class="tally-column">
+    <span class="counter">Adult: <span id="adult">0</span></span>
+    <span class="counter">Child: <span id="child">0</span></span>
+    <span class="counter">Cargo: <span id="cargo">0</span></span>
+    <span class="counter">TOTAL: <span id="total">0</span></span>
+    <button id="reset-button">Reset</button>
+  </div>
+</div>
 <script>
+
+  
+  document.getElementById('counter-banner').addEventListener('click', function() {
+  this.classList.toggle('expanded-banner');
+});
+
   const squaresContainer = document.getElementById('squares-container');
   const squareLabels = ['A', 'B', 'C', 'D'];
   let aisleNumber = 1;
@@ -199,6 +219,11 @@ font-size: 12px; /* Adjust the font size as needed */
   for (let row = 0; row < 9; row++) {
     const rowDiv = document.createElement('div');
     rowDiv.className = 'row';
+
+    const zone = getZone(row);
+  if (zone === 'zone1' || zone === 'zone3') {
+    rowDiv.classList.add('highlight-zone');
+  }
 
     // Add squares with labels
     for (let i = 0; i < 4; i++) {
@@ -233,12 +258,65 @@ font-size: 12px; /* Adjust the font size as needed */
   const cargoCounter = document.getElementById('cargo');
   const totalCounter = document.getElementById('total'); // Total counter element
   const squares = document.querySelectorAll('.square');
+  const zoneTallies = {
+    zone1: 0,
+    zone2: 0,
+    zone3: 0
+  };
+
 
   // Function to update the total tally
   function updateTotal() {
-    const total = counters.adult + counters.child + counters.cargo;
+    const total = counters.adult + counters.child;
     totalCounter.textContent = total;
   }
+
+  function getZone(row) {
+    if (row < 3) return 'zone1';
+    else if (row < 6) return 'zone2';
+    else return 'zone3';
+  }
+
+  function calculateZoneTotal(zone) {
+    let total = 0;
+    for (let i = 0; i < squares.length; i++) {
+      const row = Math.floor(i / 4);
+      if (getZone(row) === zone) {
+        if (states[i] === 1 || states[i] === 2) { // Adult or Child
+          total++;
+        }
+      }
+    }
+    return total;
+  }
+
+  // New structure to keep track of counts by zones
+  let zoneCounts = {
+    zone1: { adult: 0, child: 0, cargo: 0 },
+    zone2: { adult: 0, child: 0, cargo: 0 },
+    zone3: { adult: 0, child: 0, cargo: 0 }
+  };
+
+  function getZone(row) {
+    if (row < 3) return 'zone1';
+    else if (row < 6) return 'zone2';
+    else return 'zone3';
+  }
+
+  function calculateZoneTotal(zone) {
+    let total = 0;
+    for (let i = 0; i < squares.length; i++) {
+      const row = Math.floor(i / 4);
+      if (getZone(row) === zone) {
+        if (states[i] === 1 || states[i] === 2) { // Adult or Child
+          total++;
+        }
+      }
+    }
+    return total;
+  }
+
+  
 
 squares.forEach((square, index) => {
   states[index] = 0; // Initialize state for each square
@@ -278,6 +356,21 @@ squares.forEach((square, index) => {
       childCounter.textContent = counters.child;
       cargoCounter.textContent = counters.cargo;
       updateTotal();
+      
+      const row = Math.floor(index / 4);
+      const zone = getZone(row);
+      if (zone === 'zone1') {
+        zoneTallies.zone1 = calculateZoneTotal(zone);
+      } else if (zone === 'zone2') {
+        zoneTallies.zone2 = calculateZoneTotal(zone);
+      } else if (zone === 'zone3') {
+        zoneTallies.zone3 = calculateZoneTotal(zone);
+      }
+
+      document.getElementById('zone1-total').textContent = zoneTallies.zone1;
+      document.getElementById('zone2-total').textContent = zoneTallies.zone2;
+      document.getElementById('zone3-total').textContent = zoneTallies.zone3;
+
     });
   });
 
@@ -295,6 +388,13 @@ squares.forEach((square, index) => {
       childCounter.textContent = '0';
       cargoCounter.textContent = '0';
       totalCounter.textContent = '0';
+
+      zoneTallies.zone1 = 0;
+    zoneTallies.zone2 = 0;
+    zoneTallies.zone3 = 0;
+    document.getElementById('zone1-total').textContent = '0';
+    document.getElementById('zone2-total').textContent = '0';
+    document.getElementById('zone3-total').textContent = '0';
 
       // Resetting squares
       squares.forEach((square) => {
@@ -321,6 +421,9 @@ squares.forEach((square, index) => {
       const data = `Timestamp: ${timestamp}\nAdult: ${counters.adult}\nChild: ${counters.child}\nCargo: ${counters.cargo}`;
       // Call a function to save the data to a file
       saveDataToFile(data);
+      for (const zone in zoneCounts) {
+    dataWithTotal += `\n${zone.toUpperCase()} - Adult: ${zoneCounts[zone].adult}, Child: ${zoneCounts[zone].child}, Cargo: ${zoneCounts[zone].cargo}`;
+  }
     }
 });
 
