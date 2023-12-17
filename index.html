@@ -6,6 +6,28 @@
 <title>Digital HCC</title>
 <style>
 
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1002; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+
 .zone-bar {
     height: 30px;
     background-color: rgb(249, 243, 233);
@@ -66,7 +88,7 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   /*padding: 60px 10px; Increased top and bottom padding */
-  margin-top: 110px; /* Added to create space below the top fixed banner */
+  margin-top: 85px; /* Added to create space below the top fixed banner */
   margin-bottom: 140px; /* Added to create space below the top fixed banner */
 }
 
@@ -136,14 +158,14 @@ font-size: 12px; /* Adjust the font size as needed */
   justify-content: space-around; /* Spaces out the children evenly */
   align-items: flex-start; /* Aligns items to the start of the flex container */
   height: 100px;
-  transition: height 1s !important;
+  transition: height 1s, bottom 1s; /* smooth transition for height and bottom */
 }
 
     
-  .expanded-banner {
-  height: 600px;
-  /* Additional styles for expanded state */
-  }
+.expanded-banner {
+    height: 80vh; /* 80% of the viewport height */
+    bottom: 20vh; /* Adjust bottom to push it upwards */
+}
 
       #counter-banner div {
       display: flex;
@@ -179,7 +201,7 @@ font-size: 12px; /* Adjust the font size as needed */
   /* Styles for clicked states */
   .first-click { background-color: #f5f5f5; border-color: rgb(228, 0, 0); }
   .second-click { background-color: #f5f5f5; border-color: rgb(141, 226, 224); }
-  .third-click { background-color: #f5f5f5; border-color: rgb(255, 215, 0); }
+  .third-click { background-color: #f5f5f5; border-color: rgb(50, 50, 50); }
 
   /* Responsive adjustments */
 /* Responsive adjustments for smaller screens */
@@ -230,6 +252,25 @@ font-size: 12px; /* Adjust the font size as needed */
     <button id="reset-button">Reset</button>
   </div>
 </div>
+
+<div id="reset-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <div class="tally-column">
+    <span class="zone-counter">Zone 1: <span id="zone1-total">0</span></span>
+    <span class="zone-counter">Zone 2: <span id="zone2-total">0</span></span>
+    <span class="zone-counter">Zone 3: <span id="zone3-total">0</span></span>
+  </div>
+  <div class="tally-column">
+    <span class="counter">Adult: <span id="adult">0</span></span>
+    <span class="counter">Child: <span id="child">0</span></span>
+    <span class="counter">Cargo: <span id="cargo">0</span></span>
+    <span class="counter">TOTAL: <span id="total">0</span></span>
+    <button id="reset-button">Reset</button>
+  </div>
+    </div>
+</div>
+
 <script>
 
   
@@ -420,9 +461,11 @@ squares.forEach((square, index) => {
     });
   });
 
-    document.getElementById('reset-button').addEventListener('click', function() {
-    // Display confirmation prompt
-    const shouldReset = confirm('Are you sure you want to reset the Head Count Card?');
+document.getElementById('reset-button').addEventListener('click', function() {
+    // Display the modal
+    document.getElementById('reset-modal').style.display = 'block';
+
+
     
     // Check if user confirmed the action
     if (shouldReset) {
@@ -532,6 +575,11 @@ function saveDataToFile(data) {
                 console.log('Service Worker registration failed:', error);
             });
     }
+
+    document.querySelector('.close-button').addEventListener('click', function() {
+    document.getElementById('reset-modal').style.display = 'none';
+});
+
 </script>
 
 
