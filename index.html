@@ -29,7 +29,7 @@
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    font-size: larger;
+    font-size: ;
 }
 
 .modal-content {
@@ -39,7 +39,6 @@
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    font-size: medium;
 }
 
 
@@ -204,6 +203,7 @@ font-size: 12px; /* Adjust the font size as needed */
       .counter {
       display: block;
       margin: 5px 0;
+      font-size: larger;
     }
 
       #counter-banner .counter {
@@ -211,7 +211,7 @@ font-size: 12px; /* Adjust the font size as needed */
       margin: 0; /* Adjusted margin */
     }
 
-    #reset-button, #save-button  {
+    #reset-button, #save-button, #reset-button2  {
   padding: 14px 24px;
   background-color: rgb(228, 0, 0);
   color: white;
@@ -286,7 +286,8 @@ font-size: 12px; /* Adjust the font size as needed */
     <span class="counter">Child:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="child">0</span></span>
     <span class="counter">Cargo:&nbsp;&nbsp;&nbsp;&nbsp; <span id="cargo">0</span></span>
     <span class="counter">Infant:&nbsp;&nbsp;&nbsp;&nbsp; <span id="infant-counter">0</span>
-    <span class="counter"><strong>TOTAL:&nbsp;&nbsp;&nbsp; </strong><span id="total"><strong>0</strong></span></span>
+    <span class="counter"><strong>TOTAL:&nbsp;&nbsp;&nbsp;&nbsp; </strong><span id="total"><strong>0</strong></span></span>
+    <button id="reset-button2">RESET</button>
   </div>
     </div>
 </div>
@@ -490,6 +491,42 @@ squares.forEach((square, index) => {
 document.getElementById('reset-button').addEventListener('click', function() {
     // Display the modal
     document.getElementById('reset-modal').style.display = 'block';
+
+    document.getElementById('reset-button2').addEventListener('click', function() {
+    // Display confirmation prompt
+    const shouldReset = confirm('Are you sure you want to reset the Head Count Card?');
+    
+    // Check if user confirmed the action
+    if (shouldReset) {
+      // Resetting counters
+      counters.adult = 0;
+      counters.child = 0;
+      counters.cargo = 0;
+      adultCounter.textContent = '0';
+      childCounter.textContent = '0';
+      cargoCounter.textContent = '0';
+      totalCounter.textContent = '0';
+
+      zoneTallies.zone1 = 0;
+    zoneTallies.zone2 = 0;
+    zoneTallies.zone3 = 0;
+    document.getElementById('zone1-total').textContent = '0';
+    document.getElementById('zone2-total').textContent = '0';
+    document.getElementById('zone3-total').textContent = '0';
+
+      // Resetting squares
+      squares.forEach((square) => {
+        square.className = 'square'; // Resets to default style
+        const dynamicText = square.querySelector('.dynamic-text');
+        if (dynamicText) {
+          dynamicText.textContent = ''; // Clear the dynamic text
+        }
+      });
+
+      // Resetting states
+      states = states.map(() => 0);
+    }
+  });
 
 
     
