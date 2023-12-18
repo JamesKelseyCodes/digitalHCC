@@ -18,6 +18,18 @@
     position: absolute;
 }
 
+.label {
+    flex: 1; /* Ensures that labels take up equal space */
+    text-align: right; /* Right-aligns the labels */
+    margin-right: 10px; /* Space between label and number */
+}
+
+.value {
+    flex: 0; /* Numbers do not grow to fill space */
+    text-align: left; /* Left-aligns the numbers */
+    width: 30px; /* Ensures consistent width for numbers */
+}
+
 
 .modal {
     display: none; /* Hidden by default */
@@ -29,7 +41,7 @@
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    font-size: ;
+    font-size: x-large;
 }
 
 .modal-content {
@@ -201,9 +213,12 @@ font-size: 12px; /* Adjust the font size as needed */
     }
 
       .counter {
-      display: block;
+      /*display: block;*/
       margin: 5px 0;
-      font-size: larger;
+      font-size: x-large;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
     }
 
       #counter-banner .counter {
@@ -223,12 +238,9 @@ font-size: 12px; /* Adjust the font size as needed */
   display: block; /* Change the display to block */
     margin-left: auto;
     margin-right: auto;
+    font-size: medium;
     }
-  
-    .counter {
-    display: block;
-    margin: 5px 0;
-  }
+
 
   /* Styles for clicked states */
   .first-click { background-color: #f5f5f5; border-color: rgb(228, 0, 0); }
@@ -245,14 +257,6 @@ font-size: 12px; /* Adjust the font size as needed */
   /*.square:nth-child(2) {
     margin-right: 5vw; /* Smaller gap for the 'aisle' on smaller screens
   }*/
-
-.counter {
-  /* Removed position:absolute and bottom properties */
-  width: 100%;
-  text-align: center;
-  display: block; /* Each counter on its own line */
-  margin: 5px 0; /* Adds vertical spacing between counters */
-}
 
   #counter-banner button {
   margin-left: 20px;
@@ -277,22 +281,68 @@ font-size: 12px; /* Adjust the font size as needed */
 </div>
 
 <div id="reset-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-button">&times;</span>
-    <span class="counter">Zone 1:&nbsp;&nbsp;&nbsp; <span id="zone1-total">   0</span></span>
-    <span class="counter">Zone 2:&nbsp;&nbsp;&nbsp; <span id="zone2-total">0</span></span>
-    <span class="counter">Zone 3:&nbsp;&nbsp;&nbsp; <span id="zone3-total">0</span></span>
-    <span class="counter">Adult:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="adult">0</span></span>
-    <span class="counter">Child:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="child">0</span></span>
-    <span class="counter">Cargo:&nbsp;&nbsp;&nbsp;&nbsp; <span id="cargo">0</span></span>
-    <span class="counter">Infant:&nbsp;&nbsp;&nbsp;&nbsp; <span id="infant-counter">0</span>
-    <span class="counter"><strong>TOTAL:&nbsp;&nbsp;&nbsp;&nbsp; </strong><span id="total"><strong>0</strong></span></span>
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <strong><span id="current-date">Date goes here</span></strong><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dash-8 200 Series</strong>
+
+    <div class="counter">
+      <span class="label">Zone 1:</span>
+      <span class="value" id="zone1-total">0</span>
+    </div>
+
+    <div class="counter">
+      <span class="label">Zone 2:</span>
+      <span class="value" id="zone2-total">0</span>
+    </div>
+
+    <div class="counter">
+      <span class="label">Zone 3:</span>
+      <span class="value" id="zone3-total">0</span>
+    </div>
+
+    <div class="counter">
+      <span class="label">Adult:</span>
+      <span class="value" id="adult">0</span>
+    </div>
+
+    <div class="counter">
+      <span class="label">Child:</span>
+      <span class="value" id="child">0</span>
+    </div>
+
+    <div class="counter">
+      <span class="label">Cargo:</span>
+      <span class="value" id="cargo">0</span>
+    </div>
+
+    <div class="counter">
+      <span class="label">Infant:</span>
+      <span class="value" id="infant-counter">0</span>
+    </div>
+
+    <div class="counter">
+      <strong><span class="label">TOTAL:</span></strong>
+      <strong><span class="value" id="total">0</span></strong>
+    </div>
+
     <button id="reset-button2">RESET</button>
   </div>
-    </div>
 </div>
 
+
 <script>
+
+  document.addEventListener("DOMContentLoaded", function() {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+    var yy = today.getFullYear().toString().substr(-2);
+
+    today = dd + '/' + mm + '/' + yy;
+    document.getElementById('current-date').textContent = today;
+});
+
+
   document.getElementById('increment-infant-button').addEventListener('click', function() {
     const counterElement = document.getElementById('infant-counter');
     let count = parseInt(counterElement.textContent);
@@ -488,26 +538,22 @@ squares.forEach((square, index) => {
     });
   });
 
-document.getElementById('reset-button').addEventListener('click', function() {
+  document.getElementById('reset-button').addEventListener('click', function() {
     // Display the modal
     document.getElementById('reset-modal').style.display = 'block';
+});
 
-    document.getElementById('reset-button2').addEventListener('click', function() {
-    // Display confirmation prompt
-    const shouldReset = confirm('Are you sure you want to reset the Head Count Card?');
-    
-    // Check if user confirmed the action
-    if (shouldReset) {
-      // Resetting counters
-      counters.adult = 0;
-      counters.child = 0;
-      counters.cargo = 0;
-      adultCounter.textContent = '0';
-      childCounter.textContent = '0';
-      cargoCounter.textContent = '0';
-      totalCounter.textContent = '0';
+document.getElementById('reset-button2').addEventListener('click', function() {
+    // Resetting counters
+    counters.adult = 0;
+    counters.child = 0;
+    counters.cargo = 0;
+    adultCounter.textContent = '0';
+    childCounter.textContent = '0';
+    cargoCounter.textContent = '0';
+    totalCounter.textContent = '0';
 
-      zoneTallies.zone1 = 0;
+    zoneTallies.zone1 = 0;
     zoneTallies.zone2 = 0;
     zoneTallies.zone3 = 0;
     document.getElementById('zone1-total').textContent = '0';
@@ -515,54 +561,22 @@ document.getElementById('reset-button').addEventListener('click', function() {
     document.getElementById('zone3-total').textContent = '0';
     document.getElementById('infant-counter').textContent = '0';
 
-      // Resetting squares
-      squares.forEach((square) => {
+    // Resetting squares
+    squares.forEach((square) => {
         square.className = 'square'; // Resets to default style
         const dynamicText = square.querySelector('.dynamic-text');
         if (dynamicText) {
-          dynamicText.textContent = ''; // Clear the dynamic text
+            dynamicText.textContent = ''; // Clear the dynamic text
         }
-      });
+    });
 
-      // Resetting states
-      states = states.map(() => 0);
-    }
-  });
+    // Resetting states
+    states = states.map(() => 0);
 
+    // Close the modal
+    document.getElementById('reset-modal').style.display = 'none';
+});
 
-    
-    // Check if user confirmed the action
-    if (shouldReset) {
-      // Resetting counters
-      counters.adult = 0;
-      counters.child = 0;
-      counters.cargo = 0;
-      adultCounter.textContent = '0';
-      childCounter.textContent = '0';
-      cargoCounter.textContent = '0';
-      totalCounter.textContent = '0';
-
-      zoneTallies.zone1 = 0;
-    zoneTallies.zone2 = 0;
-    zoneTallies.zone3 = 0;
-    document.getElementById('zone1-total').textContent = '0';
-    document.getElementById('zone2-total').textContent = '0';
-    document.getElementById('zone3-total').textContent = '0';
-    document.getElementById('infant-counter').textContent = '0';
-
-      // Resetting squares
-      squares.forEach((square) => {
-        square.className = 'square'; // Resets to default style
-        const dynamicText = square.querySelector('.dynamic-text');
-        if (dynamicText) {
-          dynamicText.textContent = ''; // Clear the dynamic text
-        }
-      });
-
-      // Resetting states
-      states = states.map(() => 0);
-    }
-  });
 
   document.getElementById('save-button').addEventListener('click', function() {
     // Display confirmation prompt
