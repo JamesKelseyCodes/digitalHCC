@@ -550,6 +550,117 @@ if (numberOfRows === 13) {
     }
     }
 }
+    
+if (numberOfRows === 19) {
+    for (let row = 0; row < numberOfRows; row++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.className = 'row';
+
+        // Place the zone bar above the very first row
+        if (row === 0) {
+            const zoneBar = document.createElement('div');
+            zoneBar.className = 'zone-bar';
+            const zoneText = document.createElement('span');
+            zoneText.className = 'zone-text';
+            zoneText.textContent = 'ZONE 1';
+            zoneBar.appendChild(zoneText);
+            squaresContainer.appendChild(zoneBar);
+        }
+
+        // Create the squares for this row
+        // For the first row, create two squares to the right of where the aisle would be
+        if (row === 0) {
+
+            for (let i = 0; i < 2; i++) {
+                const squareDiv = document.createElement('div');
+                squareDiv.className = 'square';
+                const label = document.createElement('span');
+                label.className = 'square-label';
+                label.innerText = ['A', 'B'][i];
+                squareDiv.appendChild(label);
+                rowDiv.appendChild(squareDiv);
+            }
+
+            const aisleLabel = document.createElement('div');
+                    aisleLabel.className = 'aisle-label';
+                    aisleLabel.innerText = aisleNumber.toString();
+                    rowDiv.appendChild(aisleLabel);
+                    aisleNumber++
+
+            // Create placeholder divs for the missing squares on the left
+            for (let i = 0; i < 2; i++) {
+                const placeholderDiv = document.createElement('div');
+                placeholderDiv.className = 'square placeholder';
+                placeholderDiv.style.visibility = 'hidden'; // Make the placeholder invisible
+                placeholderDiv.style.pointerEvents = 'none'; // Make the placeholder unclickable
+                rowDiv.appendChild(placeholderDiv);
+            }
+            // Create the actual squares 'C' and 'D'
+
+        } else {
+            // For all other rows, create four squares with the aisle in the middle
+            for (let i = 0; i < 4; i++) {
+                if (i === 2) { // Place the aisle in the middle
+                    const aisleLabel = document.createElement('div');
+                    aisleLabel.className = 'aisle-label';
+                    aisleLabel.innerText = aisleNumber.toString();
+                    rowDiv.appendChild(aisleLabel);
+                }
+                const squareDiv = document.createElement('div');
+                squareDiv.className = 'square';
+                const label = document.createElement('span');
+                label.className = 'square-label';
+                label.innerText = squareLabels[i];
+                squareDiv.appendChild(label);
+                rowDiv.appendChild(squareDiv);
+            }
+            aisleNumber++;
+        }
+
+        // Append the completed row to the squaresContainer
+        squaresContainer.appendChild(rowDiv);
+
+        if ((numberOfRows === 9 && (row === 3 || row === 6)) ||
+        (numberOfRows === 19 && (row === 2 || row === 5 || row === 8 || row === 11 || row === 14 || row === 17 ))) {
+        const zoneBar = document.createElement('div');
+        zoneBar.className = 'zone-bar';
+        const zoneText = document.createElement('span');
+        zoneText.className = 'zone-text';
+
+        // Place the zone bar above the very first row
+        if (row === 0) {
+            const zoneBar = document.createElement('div');
+            zoneBar.className = 'zone-bar';
+            const zoneText = document.createElement('span');
+            zoneText.className = 'zone-text';
+            zoneText.textContent = 'ZONE 1';
+            zoneBar.appendChild(zoneText);
+            squaresContainer.appendChild(zoneBar);
+        }
+
+        if (row === 0) {
+            zoneText.textContent = 'ZONE 1';
+        } else if (row === 2) {
+            zoneText.textContent = 'ZONE 2';
+        } else if (row === 5) {
+            zoneText.textContent = 'ZONE 3';
+        } else if (row === 8) {
+            zoneText.textContent = 'ZONE 4';
+        } else if (row === 11) {
+            zoneText.textContent = 'ZONE 5';
+        } else if (row === 14) {
+            zoneText.textContent = 'ZONE 6';
+        } else if (row === 17) {
+            zoneText.textContent = 'ZONE 7';
+        }
+
+        zoneBar.appendChild(zoneText);
+        squaresContainer.appendChild(zoneBar);
+    
+    }
+}
+
+}
 
 
 
