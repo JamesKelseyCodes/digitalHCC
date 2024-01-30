@@ -9,20 +9,21 @@
 .modal2 {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    right: 0px; /* Align to the right */
-    bottom: 120px; /* 120px from the bottom */
+    right: 50px; /* Align to the right */
+    bottom: 122px; /* 120px from the bottom */
     z-index: 1; /* Sit on top */
     width: auto; /* Auto-adjust width based on content */
-    max-width: 80%; /* Ensure it doesn't exceed the viewport width */
+    align-items: center; /* Center items horizontally */
 }
 
-.modal2-content {
-    background-color: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
+.modal2-content, #myModal2 {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 5px;
     display: flex; /* Use flexbox */
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    right: 50px; /* Align to the right */
 }
 
 .modal2-content button {
@@ -252,8 +253,8 @@ font-size: 12px; /* Adjust the font size as needed */
       #counter-banner div {
       display: flex;
       justify-content: space-between;
-      width: 30%;   /* change this to change the justification of the bottom elements **************************** */
-      font-size: medium;
+      /*width: 20%;   /* change this to change the justification of the bottom elements **************************** */
+      font-size: large;
       font-weight: bold;
     }
 
@@ -292,6 +293,10 @@ font-size: 12px; /* Adjust the font size as needed */
     display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+#increment-infant-button, #decrement-infant-button, #infant-text {
+    margin-left: 40px
 }
 
 
