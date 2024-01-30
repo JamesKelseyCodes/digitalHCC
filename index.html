@@ -253,7 +253,7 @@ font-size: 12px; /* Adjust the font size as needed */
       display: flex;
       justify-content: space-between;
       width: 30%;   /* change this to change the justification of the bottom elements **************************** */
-      font-size: large;
+      font-size: medium;
       font-weight: bold;
     }
 
@@ -391,11 +391,12 @@ font-size: 12px; /* Adjust the font size as needed */
     </div>
 </div>
 
-<div style="display: inline-block;">
-<button id="decrement-infant-button" style="display: inline-block;">-</button>
-<span id="infant-text">INFANT</span>
-<button id="increment-infant-button" style="display: inline-block;">+</button>
+<div style="display: inline-block; text-align: center;">
+    <button id="decrement-infant-button" style="display: inline-block;">-</button>
+    <div id="infant-text" style="display: block;">INFANT</div>
+    <button id="increment-infant-button" style="display: inline-block;">+</button>
 </div>
+
 
 <button id="more-button">MORE</button>
  
@@ -443,22 +444,22 @@ font-size: 12px; /* Adjust the font size as needed */
 
     <div class="counter">
       <span class="label">Adult:</span>
-      <span class="value" id="adult">0</span>
+      <span class="value" id="modal-adult">0</span>
     </div>
 
     <div class="counter">
       <span class="label">Child:</span>
-      <span class="value" id="child">0</span>
+      <span class="value" id="modal-child">0</span>
     </div>
 
     <div class="counter">
       <span class="label">Cargo:</span>
-      <span class="value" id="cargo">0</span>
+      <span class="value" id="modal-cargo">0</span>
     </div>
 
     <div class="counter">
-      <span class="label">Infant:</span>
-      <span class="value" id="infant-counter">0</span>
+        <span class="label">Infant:</span>
+        <span class="value" id="modal-infant-counter">0</span>
     </div>
 
     <div class="counter">
@@ -565,12 +566,21 @@ font-size: 12px; /* Adjust the font size as needed */
 });
 
 
-// Increment infant count
+/*document.getElementById('increment-infant-button').addEventListener('click', function() {
+    const counterElement = document.getElementById('infant-counter');
+    let count = parseInt(counterElement.textContent);
+    counterElement.textContent = ++count;
+    event.stopPropagation();
+});*/
+
 document.getElementById('increment-infant-button').addEventListener('click', function(event) {
-  const counterElement = document.getElementById('infant-counter');
+  const counterElement = document.getElementById('infant-counter'); // Outside modal
+  const modalCounterElement = document.getElementById('modal-infant-counter'); // Inside modal
   let count = parseInt(counterElement.textContent);
+  let modalCount = parseInt(modalCounterElement.textContent);
   counterElement.textContent = ++count;
-  event.stopPropagation(); // Stops the click event from propagating to other elements
+  modalCounterElement.textContent = count;
+  event.stopPropagation();
 });
 
 // Decrement infant count
